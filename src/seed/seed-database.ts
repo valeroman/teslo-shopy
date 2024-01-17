@@ -24,6 +24,18 @@ async function main() {
         data: categoriesData
     });
 
+    // Obtener las categorias de BD
+    const categoriesDB = await prisma.category.findMany();
+
+    // Pasar de un arreglo a un objeto donde la llave sea el name: 'shirts' y me devuelva el id
+    const categoriesMap = categoriesDB.reduce( (map, category) => {
+        map[category.name.toLowerCase()] = category.id;
+        return map;
+    }, {} as Record<string, string>); //<string=shirt, string=categoryID>
+
+    console.log(categoriesMap);
+
+
 
 
     console.log('Seed ejecutado correctamente');
