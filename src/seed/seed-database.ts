@@ -6,11 +6,11 @@ import prisma from '../lib/prisma';
 async function main() {
 
     // 1. Borrar registros previos
-    await Promise.all([
-        prisma.productImage.deleteMany(),
-        prisma.product.deleteMany(),
-        prisma.category.deleteMany(),
-    ]);
+    //await Promise.all([
+        await prisma.productImage.deleteMany();
+        await prisma.product.deleteMany();
+        await prisma.category.deleteMany()
+    //]);
 
     const {categories, products } = initialData;
 
@@ -33,7 +33,7 @@ async function main() {
         return map;
     }, {} as Record<string, string>); //<string=shirt, string=categoryID>
 
-    console.log(categoriesMap);
+    //console.log(categoriesMap);
 
     // const { images, type,  ...product1} = products[0];
     // await prisma.product.create({
@@ -42,6 +42,8 @@ async function main() {
     //         categoryId: categoriesMap['shirts']
     //     }
     // })
+
+    // Productos
 
     products.forEach( async(product) => {
 
@@ -53,7 +55,17 @@ async function main() {
                 categoryId: categoriesMap[type]
             }
         })
-    })
+
+        // Images
+        const imagesData = images.map( image => ({
+            url: image,
+            productId: dbProduct.id
+        }));
+
+        await prisma.productImage.createMany({
+            data: imagesData
+        });
+    });
 
 
 
