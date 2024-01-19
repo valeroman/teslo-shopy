@@ -35,6 +35,26 @@ async function main() {
 
     console.log(categoriesMap);
 
+    // const { images, type,  ...product1} = products[0];
+    // await prisma.product.create({
+    //     data: {
+    //         ...product1,
+    //         categoryId: categoriesMap['shirts']
+    //     }
+    // })
+
+    products.forEach( async(product) => {
+
+        const { type, images, ...rest } = product;
+
+        const dbProduct = await prisma.product.create({
+            data: {
+                ...rest,
+                categoryId: categoriesMap[type]
+            }
+        })
+    })
+
 
 
 

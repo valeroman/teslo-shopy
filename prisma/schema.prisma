@@ -24,7 +24,7 @@ enum Gender {
   men
   women
   kid
-  unnisex
+  unisex
 }
 
 model Category {
