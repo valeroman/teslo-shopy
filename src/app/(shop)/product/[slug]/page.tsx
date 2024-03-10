@@ -1,7 +1,11 @@
+export const revalidate = 604800; // 7 dias
+
+import { getProductBySlug } from "@/actions";
 import { ProductMobileSlideshow, ProductSlideshow, QuantitySelector, SizeSelector } from "@/components";
 import { titleFont } from "@/config/fonts";
-import { initialData } from "@/seed/seed";
+
 import { notFound } from "next/navigation";
+import { StockLabel } from '../../../../components/product/stock-label/StockLabel';
 
 interface Props {
   params: {
@@ -9,12 +13,13 @@ interface Props {
   }
 }
 
-export default function ProductBySlugPage({ params }: Props) {
+export default async function ProductBySlugPage({ params }: Props) {
 
   const { slug } = params;
-  const product = initialData.products.find( product => product.slug === slug );
+  const product = await getProductBySlug(slug);
+  console.log(product)
 
-  if ( !product ) {
+  if (!product) {
     notFound();
   }
 
@@ -25,16 +30,16 @@ export default function ProductBySlugPage({ params }: Props) {
       <div className="col-span-1 md:col-span-2">
 
         {/* Desktop Slideeshow */}
-        <ProductSlideshow 
-          title={ product.title }
-          images={ product.images }
+        <ProductSlideshow
+          title={product.title}
+          images={product.images}
           className="hidden md:block"
         />
 
         {/* Mobile Slideshow */}
         <ProductMobileSlideshow
-          title={ product.title }
-          images={ product.images }
+          title={product.title}
+          images={product.images}
           className="block md:hidden"
         />
       </div>
@@ -42,22 +47,25 @@ export default function ProductBySlugPage({ params }: Props) {
 
       {/* Detalles */}
       <div className="col-span-1 px-5">
-        <h1 className={`${ titleFont.className } antialiased font-bold text-xl`}>
-          { product.title }
+
+        <StockLabel slug={ slug } />
+
+        <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
+          {product.title}
         </h1>
 
         <p className="text-lg mb-5">
-          ${ product.price }
+          ${product.price}
         </p>
 
         {/* Selector tallas */}
-        <SizeSelector 
-          selectedSize={ product.sizes[0] }
-          availableSizes={ product.sizes }
+        <SizeSelector
+          selectedSize={product.sizes[0]}
+          availableSizes={product.sizes}
         />
 
         {/* Selector cantidad */}
-        <QuantitySelector quantity={ 2 }/>
+        <QuantitySelector quantity={2} />
 
         {/* Boton */}
         <button className="btn-primary my-5">
@@ -67,7 +75,7 @@ export default function ProductBySlugPage({ params }: Props) {
         {/* Descripcion */}
         <h3 className="font-bold text-sm">Descripción</h3>
         <p className="font-light">
-          { product.description }
+          {product.description}
         </p>
       </div>
 

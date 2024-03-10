@@ -2,7 +2,7 @@ export const revalidate = 60;  // 60 segundos
 
 import { Pagination, ProductGrid, Title } from "@/components";
 import { redirect } from "next/navigation";
-import { getPaginatedProductsWithImages } from "../../actions";
+import { getPaginatedProductsWithImages } from "../../../../actions";
 import { Gender } from "@prisma/client";
 
 
