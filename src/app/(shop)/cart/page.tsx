@@ -1,15 +1,8 @@
-import { QuantitySelector, Title } from "@/components";
-import { initialData } from "@/seed/seed";
+import { Title } from "@/components";
 import Link from "next/link";
-import Image from 'next/image';
 import { redirect } from "next/navigation";
+import { ProductsInCart } from "./ui/ProductsInCart";
 
-const productInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-
-]
 
 export default function CartPage() {
 
@@ -33,26 +26,7 @@ export default function CartPage() {
 
 
             {/* Items */}
-            {
-              productInCart.map(product => (
-                <div key={product.slug} className="flex mb-5" >
-                  <Image
-                    src={`/products/${product.images[0]}`}
-                    width={100}
-                    height={100}
-                    alt={product.title}
-                    className="mr-5 rounded"
-                  />
-
-                  <div>
-                    <p>{product.title}</p>
-                    <p>${product.price}</p>
-                    <QuantitySelector quantity={3} />
-                  </div>
-
-                </div>
-              ))
-            }
+            <ProductsInCart />
 
           </div>
 

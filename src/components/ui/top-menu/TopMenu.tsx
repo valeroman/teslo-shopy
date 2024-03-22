@@ -1,14 +1,23 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { IoSearchOutline, IoCartOutline } from 'react-icons/io5';
 import { titleFont } from '@/config/fonts'
-import { useUIStore } from '@/store';
+import { useCartStore, useUIStore } from '@/store';
 
 
 export const TopMenu = () => {
 
-    const openMenu = useUIStore( state => state.openSideMenu );
+    const openMenu = useUIStore(state => state.openSideMenu);
+    const totalItemsInCart = useCartStore(state => state.getTotalItems());
+
+    //Resolver la hidratacion del carrito de compras
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        setLoaded(true);
+    }, [])
 
     return (
         <nav className='flex px-5 justify-between items-center w-full'>
@@ -27,7 +36,7 @@ export const TopMenu = () => {
             <div className='hidden sm:block'>
                 <Link className='m-2 p-2 rounded-md transition-all hover:bg-gray-100' href="/gender/men">Hombres</Link>
                 <Link className='m-2 p-2 rounded-md transition-all hover:bg-gray-100' href="/gender/women">Mujeres</Link>
-                <Link className='m-2 p-2 rounded-md transition-all hover:bg-gray-100' href="/genderˇs/kid">Niños</Link>
+                <Link className='m-2 p-2 rounded-md transition-all hover:bg-gray-100' href="/gender/kid">Niños</Link>
             </div>
 
             {/* Search, Cacrt, Menu */}
@@ -38,14 +47,20 @@ export const TopMenu = () => {
 
                 <Link href="/cart" className='mx-2'>
                     <div className='relative'>
-                        <span className='absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-blue-700 text-white'>3</span>
+                        {
+                            (loaded && totalItemsInCart > 0) && (
+                                <span className='absolute text-xs rounded-full px-1 font-bold -top-2 -right-2 bg-blue-700 text-white'>
+                                    {totalItemsInCart}
+                                </span>
+                            )
+                        }
                         <IoCartOutline className="w-5 h-5" />
                     </div>
                 </Link>
 
                 <button
                     className='m-2 p-2 rounded-md transition-all hover:bg-gray-100'
-                    onClick={ openMenu }
+                    onClick={openMenu}
                 >
                     Menu
                 </button>

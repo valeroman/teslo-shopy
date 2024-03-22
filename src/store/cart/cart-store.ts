@@ -8,6 +8,8 @@ import { persist } from 'zustand/middleware';
 interface State {
     cart: CartProduct[];
 
+    getTotalItems: () => number;
+
     addProductToCart: (product: CartProduct) => void;
     //updateProductQuantity
     //removeProduct
@@ -21,6 +23,17 @@ export const useCartStore = create<State>()(
             cart: [],
 
             //Methods
+
+            getTotalItems: () => {
+
+                const { cart } = get();
+
+                // recorrer el arreglo de cart con el reduce
+                // funcion que regresar () => ese valor (10), valor inicial (0)
+                // () => 10, 0
+                return cart.reduce(( total, item ) => total + item.quantity, 0);
+            },
+
             addProductToCart: (product: CartProduct) => {
                 // El get me permite obtener el estado actual
                 const { cart } = get();
