@@ -9,6 +9,9 @@ import Link from "next/link";
 export const ProductsInCart = () => {
 
     const productInCart = useCartStore(state => state.cart);
+    const updateProductQuantity = useCartStore(state => state.updateProductQuantity);
+    const removeProductInCart = useCartStore( state => state.removeProduct);
+
 
     const [loaded, setLoaded] = useState(false);
 
@@ -29,6 +32,10 @@ export const ProductsInCart = () => {
                             src={`/products/${product.image}`}
                             width={100}
                             height={100}
+                            style={{
+                                width: "100px",
+                                height: "100px"
+                            }}
                             alt={product.title}
                             className="mr-5 rounded"
                         />
@@ -42,9 +49,16 @@ export const ProductsInCart = () => {
                             </Link>
                             <p>${product.price}</p>
                             <QuantitySelector
-                                quantity={3}
-                                onQuantityChanged={value => console.log(value)}
+                                quantity={ product.quantity }
+                                onQuantityChanged={(quantity) => updateProductQuantity(product, quantity)}
                             />
+
+                            <button
+                                className="underline mt-3"
+                                onClick={() => removeProductInCart(product) }
+                            >
+                                Remover
+                            </button>
                         </div>
 
                     </div>
